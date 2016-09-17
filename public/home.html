@@ -1,0 +1,50 @@
+<div class="container">
+	<h1>{{vm.title}}</h1>
+
+	<div class="container users-container">
+		<table class="table table-bordered table-striped table-hovered table-condensed" ng-hide="vm.detailed">
+			<th>Name</th>
+			<th>Age</th>
+			<th>Actions</th>
+			<tr ng-repeat="user in vm.users">
+				<td style="cursor: pointer;" ng-if="!editing" ng-click="vm.showDetails(user)">{{user.name}}</td>
+				<td style="cursor: pointer;" ng-if="!editing" ng-click="vm.showDetails(user)">{{user.age}}</td>
+				<td ng-if="editing">
+					<input type="text" ng-model="user.name" class="form-control" style="width:100px;">
+				</td>
+				<td ng-if="editing">
+					<input type="text" ng-model="user.age" class="form-control" style="width:100px;">
+
+				</td>
+				<td>
+					<button ng-hide="editing" class="btn btn-warning" ng-click="editing=!editing">Edit</button>
+					<button ng-hide="!editing" class="btn btn-success" ng-click="vm.updateUser(user);editing=false;">Save</button>
+					<button class="btn btn-primary" ng-hide="!editing"  ng-click="editing=!editing">Back</button>
+					<button class="btn btn-danger" ng-hide="editing" ng-click="vm.removeUser(user);">Delete</button>
+				</td>
+			</tr>
+		</table>
+		<button class="btn btn-primary btn-md" ng-hide="vm.detailed === true ||vm.adduser == true;" ng-click="vm.adduser=!vm.adduser">Add A User</button>
+	</div>
+	<div class="container create-users" ng-hide="!vm.adduser">
+		<div class="form-group">
+			<label for="name">Name</label>
+			<input required type="text" id="name" class="form-control" style="width:300px;" ng-model="vm.user.name"> 
+		</div>
+		<div class="form-group">
+			<label for="name">Age</label>
+			<input required type="number" id="age" class="form-control" style="width:300px;" ng-model="vm.user.age">
+		</div>
+		<button class="btn btn-success" ng-click="vm.addUser(vm.user)" ng-disabled="!vm.user.name || !vm.user.age">Add</button>
+		<button class="btn btn-primary" ng-click="vm.adduser = false;" >Back</button>
+	</div>
+	<div class="container details-container" ng-if="vm.detailed === true">
+		<div class="jumbotron">
+			<div class="close" style="font-size: 50px; color: black" ng-click="vm.detailed=false;">X</div>
+			<h3>You are viewing the details of User #{{vm.detailedUser._id}}</h3>
+			<h3>Name: {{vm.detailedUser.name}}</h3>
+			<h3>Age: {{vm.detailedUser.age}}</h3>
+		</div>
+	</div>
+
+</div>

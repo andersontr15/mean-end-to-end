@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+	<script src="https://code.angularjs.org/1.5.8/angular-route.js"></script>
+	<script>
+		var app = angular.module('app', ['ngRoute']);
+
+		app.controller('HomeController', function($http){
+			var vm = this;
+
+			vm.users = [];
+
+			vm.detailedUser;
+
+			vm.showDetails = function(user){
+				vm.detailedUser = user;
+				vm.detailed = true;
+			}
+
+			vm.getUsers = function(){
+				$http.get('/api/users').then(function(response){
+					vm.users = response.data;
+				});
+			}
+			vm.getUsers();
+
+			vm.updateUser = function(user){
+				if(user){
+					$http.put('/api/users', user).then(function(response){
+						console.log('updated user');
+						vm.getUsers();
+					})
+				}
+			}
+
+			vm.removeUser = function(user){
+				console.log(user);
+				if(user){
+					$http.delete('/api/users/' + user._id).then(function(response){
+						vm.getUsers();
+					});
+				}
+			}
+
+
+			vm.addUser = function(user){
+				if(user && user.name && user.age){
+					console.log('about to create user');
+
+					$http.post('/api/users', user).then(function(response){
+						vm.getUsers();
+						vm.user = '';
+						vm.adduser = false;
+					});
+
+				}
+				else {
+					console.log('You have not supplied enough details..');
+				}
+			}
+
+
+			return true;
+		});
+
+		app.config(function($routeProvider) {
+
+			$routeProvider.when('/', {
+				controller: 'HomeController',
+				controllerAs: 'vm',
+				templateUrl: './home.html'
+			});
+			$routeProvider.otherwise('/');
+
+		});
+
+	</script>
+	<meta charset="UTF-8">
+	<title>MEAN Stack End 2 End</title>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div ng-view></div>
+			</div>
+		</div>
+	</div>
+</body>	
+</html>
