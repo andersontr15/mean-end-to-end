@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-var db = "mongodb://localhost/mean_end_to_end";
+var db = "mongodb://theo:thuglife25@ds033126.mlab.com:33126/heroku_s8w2hljr";
 
 mongoose.connect(db, function(err, response){
 	if(err){
